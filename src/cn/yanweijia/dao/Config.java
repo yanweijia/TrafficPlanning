@@ -82,6 +82,28 @@ public class Config {
 		return rec;
 	}
 	
+	//数据库url
+	public static String getSqlUrl(){
+		String url = pro.getProperty("sql_url", "jdbc:mysql://localhost/trafficplanning?characterEncoding=UTF-8");
+		return url;
+	}
 	
+	//数据库驱动名称
+	public static String getSqlDriverName(){
+		String driver = pro.getProperty("sql_driver","com.mysql.jdbc.Driver");
+		return driver;
+	}
 	
+	//数据库用户名
+	public static String getSqlUsername(){
+		String username = pro.getProperty("sql_user", "root");
+		return username;
+	}
+	
+	//数据库密码
+	public static String getSqlPassword(){
+		String password = pro.getProperty("sql_password", "");
+		return password;
+	}
+
 }

@@ -28,8 +28,6 @@ public class Language {
 		}catch(Exception e){
 			Debug.log("载入语言出错!详细信息:" + e.getMessage());
 		}
-		Debug.log("载入语言文件成功!");
-		
 	}
 	public static String MainWindow_title(){
 		return pro.getProperty("MainWindow_title","全国交通咨询模拟 20140712 Yan Weijia");
@@ -74,7 +72,7 @@ public class Language {
 		return pro.getProperty("MainWindow_comboBox_way_plane","飞机");
 	}
 	public static String MainWindow_comboBox_rules_timeFirst(){
-		return pro.getProperty("MainWindow_comboBox_rules_timeFirse","时间最短");
+		return pro.getProperty("MainWindow_comboBox_rules_timeFirst","时间最短");
 	}
 	public static String MainWindow_comboBox_rules_moneyFirst(){
 		return pro.getProperty("MainWindow_comboBox_rules_moneyFirst","价格最少");
@@ -91,4 +89,108 @@ public class Language {
 	public static String MainWindow_label_sumTransfer(){
 		return pro.getProperty("MainWindow_label_sumTransfer","换乘次数:");
 	}
+	public static String CityWindow_title(){
+		return pro.getProperty("CityWindow_title","城市信息维护");
+	}
+	public static String CityWindow_btn_add(){
+		return pro.getProperty("CityWindow_btn_add","添加城市");
+	}
+	public static String CityWindow_btn_delete(){
+		return pro.getProperty("CityWindow_btn_delete","删除选中城市");
+	}
+	public static String CityWindow_JOptionPaneLanguageBtnOK(){
+		return pro.getProperty("CityWindow_JOptionPaneLanguage_btn_ok","确定");
+	}
+	public static String CityWindow_JOptionPaneLanguageBtnCANCEL(){
+		return pro.getProperty("CityWindow_JOptionPaneLanguage_btn_cancel","取消");
+	}
+	public static String LineWindow_title(){
+		return pro.getProperty("LineWindow_title","交通线路维护");
+	}
+	public static String LineWindow_label_line(){
+		return pro.getProperty("LineWindow_label_line","线路:");
+	}
+	public static String LineWindow_comboBox_train(){
+		return pro.getProperty("LineWindow_comboBox_train","火车");
+	}
+	public static String LineWindow_comboBox_plane(){
+		return pro.getProperty("LineWindow_comboBox_plane","飞机");
+	}
+	public static String LineWindow_btn_addNew(){
+		return pro.getProperty("LineWindow_btn_addNew","新建线路");
+	}
+	public static String LineWindow_btn_delete(){
+		return pro.getProperty("LineWindow_btn_delete","删除选中线路");
+	}
+	public static String NewLineWindow_title(){
+		return pro.getProperty("NewLineWindow_title","增加新线路");
+	}
+	public static String NewLineWindow_label_way(){
+		return pro.getProperty("NewLineWindow_label_way","线路类型");
+	}
+	public static String NewLineWindow_label_from(){
+		return pro.getProperty("NewLineWindow_label_from","起始站点:");
+	}
+	public static String NewLineWindow_label_to(){
+		return pro.getProperty("NewLineWindow_label_to","到达站点:");
+	}
+	public static String NewLineWindow_label_startTime(){
+		return pro.getProperty("NewLineWindow_label_startTime","出发时间:");
+	}
+	public static String NewLineWindow_label_endTime(){
+		return pro.getProperty("NewLineWindow_label_endTime","到达时间:");
+	}
+	public static String NewLineWindow_label_distance(){
+		return pro.getProperty("NewLineWindow_label_distance", "两站距离:");
+	}
+	public static String NewLineWindow_label_costTime(){
+		return pro.getProperty("NewLineWindow_label_costTime","旅途时长:");
+	}
+	public static String NewLineWindow_label_price(){
+		return pro.getProperty("NewLineWindow_label_price","价格:");
+	}
+	public static String NewLineWindow_btn_ok(){
+		return pro.getProperty("NewLineWindow_btn_ok","确认");
+	}
+	public static String NewLineWindow_btn_cancel(){
+		return pro.getProperty("NewLineWindow_btn_cancel","取消");
+	}
+	public static String NewLineWindow_label_wayValue_train(){
+		return pro.getProperty("NewLineWindow_label_wayValue_train","火车");
+	}
+	public static String NewLineWindow_label_wayValue_plane(){
+		return pro.getProperty("NewLineWindow_label_wayValue_plane","飞机");
+	}
+	public static String NewCity_title(){
+		return pro.getProperty("NewCity_title","增加新城市");
+	}
+	public static String NewCity_label_cityID(){
+		return pro.getProperty("NewCity_label_cityID","城市编号:");
+	}
+	public static String NewCity_label_nameCN(){
+		return pro.getProperty("NewCity_label_nameCN","中文名:");
+	}
+	public static String NewCity_label_nameEN(){
+		return pro.getProperty("NewCity_label_nameEN","英文名:");
+	}
+	public static String NewCity_label_longitude(){
+		return pro.getProperty("NewCity_label_longitude","经度:");
+	}
+	public static String NewCity_label_latitude(){
+		return pro.getProperty("NewCity_label_latitude","纬度:");
+	}
+	public static String NewCity_btn_ok(){
+		return pro.getProperty("NewCity_btn_ok","确认");
+	}
+	public static String NewCity_btn_cancel(){
+		return pro.getProperty("NewCity_btn_cancel","取消");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

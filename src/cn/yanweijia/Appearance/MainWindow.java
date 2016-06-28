@@ -14,7 +14,6 @@ import javax.swing.border.TitledBorder;
 import cn.yanweijia.dao.Config;
 import cn.yanweijia.dao.Debug;
 import cn.yanweijia.dao.Language;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
@@ -107,7 +106,9 @@ public class MainWindow {
 					Config.setLanguage(Config.LANGUAGE_CN);
 				else
 					Config.setLanguage(Config.LANGUAGE_EN);
-
+				
+				Debug.log("语言被修改为:" + choice);
+				
 				initialize();	//重新初始化界面,更改语言
 			}
 		});
@@ -230,10 +231,8 @@ public class MainWindow {
 			}
 		});
 
-		
-		
-		//初始化代码,同时负责中英文显示.
-		initialize();
+
+		initialize();	//初始化代码,同时负责中英文显示.
 	}
 
 	/*

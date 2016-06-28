@@ -1,20 +1,15 @@
 package cn.yanweijia.Appearance;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public class HistoryWindow extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 
-	/*
-	 * 
-	 */
 	public HistoryWindow() {
 		setVisible(true);
 		setResizable(false);
@@ -28,9 +23,8 @@ public class HistoryWindow extends JFrame {
 		initialize();
 	}
 	
-	/*
-	 * 初始化
-	 */
+
+	//初始化
 	private void initialize(){
 		this.setTitle("查询历史");
 	}
