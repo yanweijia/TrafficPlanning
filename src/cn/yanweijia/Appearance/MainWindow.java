@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.Iterator;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +18,9 @@ import javax.swing.border.TitledBorder;
 import cn.yanweijia.Tools.Config;
 import cn.yanweijia.Tools.Debug;
 import cn.yanweijia.Tools.Language;
+import cn.yanweijia.dao.City;
+import cn.yanweijia.dao.CityList;
+import cn.yanweijia.dao.DBHelper;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,6 +42,7 @@ public class MainWindow {
 	private JLabel label_sumTimeValue,label_sumMoneyValue,label_sumTransferValue;	//显示 总用时,总金额,换乘次数 的标签.
 	private JComboBox<String> comboBox_way,comboBox_rules,comboBox_from,comboBox_to;	//组合框:交通方式,决策原则,起始站点,到达站点
 	private JTable table;
+	private City[] cityArray;	//城市列表,窗口焦点获取则更新
 	/*
 	 * 主过程
 	 */
@@ -163,16 +170,27 @@ public class MainWindow {
 				String from = (String) comboBox_from.getSelectedItem();
 				String to = (String) comboBox_to.getSelectedItem();
 				if(from==null || to==null){
-					//TODO:这里的提示语言从语言选择类中获取
-					JOptionPane.showMessageDialog(null, "站点读取失败,请选择出发站点和到达站点!","警告:",JOptionPane.ERROR_MESSAGE);
+					//这里的提示语言从语言选择类中获取
+					JOptionPane.showMessageDialog(null, "站点读取失败,请选择出发站点和到达站点!(Please Select the Node)","警告:",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				if(from.equals(to)){
 					//提示用户出发站点和到达站点不能够一样!
-					JOptionPane.showMessageDialog(null, "出发站点和到达站点不能够一样,请重新选择!","警告:",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "出发站点和到达站点不能够一样,请重新选择!(Same error:origin station and object station!)","警告:",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				//把CityID找出来
+				int id_from,id_to;
+				for(int i = 0 ; i < cityArray.length ; i++){
+					if((Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN).equals(from))
+						id_from = cityArray[i].id;
+				}
+				for(int i = 0 ; i < cityArray.length ; i++){
+					if((Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN).equals(to))
+						id_to = cityArray[i].id;
+				}
 				//TODO:这里调用核心代码来计算数据
+				
 			}
 		});
 		btn_query.setBounds(377, 111, 120, 28);
@@ -212,8 +230,8 @@ public class MainWindow {
 		panel.add(label_sumTransferValue);
 		
 		
-		
 		frame.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				Debug.log("窗口关闭");
 				Rectangle rec = frame.getBounds();
@@ -221,6 +239,11 @@ public class MainWindow {
 				
 				
 				System.exit(0);
+			}
+			@Override
+			public void windowActivated(WindowEvent e) {
+				//窗口获取焦点,被激活自动刷新城市数据
+				reloadCityList();
 			}
 		});
 
@@ -261,5 +284,19 @@ public class MainWindow {
 		label_sumTime.setText(Language.MainWindow_label_sumTime());
 		label_sumMoney.setText(Language.MainWindow_label_sumMoney());
 		label_sumTransfer.setText(Language.MainWindow_label_sumTransfer());
+	}
+	//重新加载城市列表
+	private void reloadCityList(){
+		DBHelper dbHelper = new DBHelper();
+		CityList list = null;
+		list = dbHelper.getAllCitys();
+		dbHelper.close();
+		cityArray = new City[list.getSize()];
+		Iterator<City> iterator = list.getList().iterator();
+		for(int i = 0 ; iterator.hasNext() ; i++){
+			cityArray[i] = (City)iterator.next();
+			comboBox_from.addItem(Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN);
+			comboBox_to.addItem(Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN);
+		}
 	}
 }

@@ -18,8 +18,8 @@ public class DBHelper {
 	Connection con = null;
 	PreparedStatement pst = null;
 	ResultSet result = null;
-	private static final String LINE_PLANE = "line_plane";
-	private static final String LINE_TRAIN = "line_train";
+	public static final String LINE_PLANE = "line_plane";
+	public static final String LINE_TRAIN = "line_train";
 	public DBHelper(){
 		url = Config.getSqlUrl();
 		driver = Config.getSqlDriverName();

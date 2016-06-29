@@ -3,35 +3,43 @@ package cn.yanweijia.Appearance;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
+import cn.yanweijia.Tools.Config;
 import cn.yanweijia.Tools.Language;
-
+import cn.yanweijia.dao.City;
+import cn.yanweijia.dao.CityList;
+import cn.yanweijia.dao.DBHelper;
+import cn.yanweijia.dao.DayTime;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.awt.event.ActionEvent;
 
 public class NewLineWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField_startTime,textField_endTime,textField_distance,textField_price,textField_costTime;	//文本框: 发车时间,到站时间,两站距离,价格,花费时间
+	private JTextField textField_startTime,textField_endTime,textField_distance,textField_price;	//文本框: 发车时间,到站时间,两站距离,价格,花费时间
 	private JComboBox<String> comboBox_from,comboBox_to;	//组合框: 起始站点,到达站点
 	private JButton btn_ok,btn_cancel;	//按钮: 确认,取消
 	//标签: 线路类型,起始站点,出发时间,终点站,到站时间,距离,时长,价格
-	private JLabel label_way,label_from,label_to,label_startTime,label_endTime,label_distance,label_costTime,label_price;
+	private JLabel label_way,label_from,label_to,label_startTime,label_endTime,label_distance,label_price;
 	private JLabel label_wayValue,label_id;	//线路类型的值 , 线路编号
 	private int wayValue;	//为0:火车,为1:飞机
 	private JTextField textField_id;
+	private City[] cityArray;
+	
+	
 	
 	public NewLineWindow(int wayValue) {
 		this.wayValue=wayValue;
 		setResizable(false);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 333, 470);
+		setBounds(100, 100, 333, 431);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -69,23 +77,49 @@ public class NewLineWindow extends JFrame {
 		label_distance.setBounds(38, 255, 119, 14);
 		contentPane.add(label_distance);
 		
-		label_costTime = new JLabel("CostTime:");
-		label_costTime.setBounds(38, 298, 119, 14);
-		contentPane.add(label_costTime);
-		
 		label_price = new JLabel("Price:");
-		label_price.setBounds(38, 337, 119, 14);
+		label_price.setBounds(38, 301, 119, 14);
 		contentPane.add(label_price);
 		
 		btn_ok = new JButton("OK");
 		btn_ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO:判断是否已有线路,若没有,添加新线路,若有(意思是距离,价格,发车时间等全部一样),提示用户已有该条线路
+				//判断是否已有线路,若没有,添加新线路,若有(意思是距离,价格,发车时间等全部一样),提示用户已有该条线路
 				String lineID,line_from,line_to,startTime,endTime,distance,costTime,price;
+				lineID = textField_id.getText();
+				line_from = comboBox_from.getSelectedIndex()==-1?"":comboBox_from.getSelectedItem().toString();
+				line_to = comboBox_to.getSelectedIndex()==-1?"":comboBox_to.getSelectedItem().toString();
+				if(line_from.equals(line_to)){
+					JOptionPane.showMessageDialog(NewLineWindow.this, "出发站和到达站不能是同一站点!");
+					return;
+				}
+				//把站点名称对应中文找回来
+				for(int i = 0 ; i < cityArray.length ; i++){
+					if((Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN).equals(line_from))
+						line_from = "" + cityArray[i].id;
+				}
+				for(int i = 0 ; i < cityArray.length ; i++){
+					if((Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN).equals(line_to))
+						line_to = "" + cityArray[i].id;
+				}
+				startTime = textField_startTime.getText();
+				endTime = textField_endTime.getText();
+				costTime = new DayTime(endTime).sub(new DayTime(startTime)).toString();
+				distance = textField_distance.getText();
+				price = textField_price.getText();
+				DBHelper dbHelper = new DBHelper();
+				boolean flag = dbHelper.addLine((wayValue==0)?DBHelper.LINE_TRAIN:DBHelper.LINE_PLANE, lineID, Integer.parseInt(line_from), Integer.parseInt(line_to), new DayTime(startTime), new DayTime(endTime), Double.parseDouble(distance), new DayTime(costTime), Double.parseDouble(price));
+				dbHelper.close();
+				if(flag){
+					JOptionPane.showMessageDialog(NewLineWindow.this, "添加成功!(Success)");
+					NewLineWindow.this.dispose();
+				}
+				else
+					JOptionPane.showMessageDialog(NewLineWindow.this,"添加失败!(Fail)");
 				
 			}
 		});
-		btn_ok.setBounds(38, 380, 119, 36);
+		btn_ok.setBounds(38, 344, 119, 36);
 		contentPane.add(btn_ok);
 		
 		btn_cancel = new JButton("CANCEL");
@@ -94,7 +128,7 @@ public class NewLineWindow extends JFrame {
 				NewLineWindow.this.dispose();	//关闭当前窗口
 			}
 		});
-		btn_cancel.setBounds(167, 380, 119, 36);
+		btn_cancel.setBounds(167, 344, 119, 36);
 		contentPane.add(btn_cancel);
 		
 		comboBox_to = new JComboBox<String>();
@@ -127,19 +161,13 @@ public class NewLineWindow extends JFrame {
 		textField_price = new JTextField();
 		textField_price.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_price.setColumns(10);
-		textField_price.setBounds(167, 334, 86, 20);
+		textField_price.setBounds(167, 298, 86, 20);
 		contentPane.add(textField_price);
 		
 		JLabel label_rmb = new JLabel("¥");
 		label_rmb.setHorizontalAlignment(SwingConstants.CENTER);
-		label_rmb.setBounds(263, 337, 23, 14);
+		label_rmb.setBounds(263, 301, 23, 14);
 		contentPane.add(label_rmb);
-		
-		textField_costTime = new JTextField();
-		textField_costTime.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_costTime.setColumns(10);
-		textField_costTime.setBounds(167, 295, 119, 20);
-		contentPane.add(textField_costTime);
 		
 		label_id = new JLabel("no:");
 		label_id.setBounds(38, 42, 119, 14);
@@ -156,10 +184,6 @@ public class NewLineWindow extends JFrame {
 	//初始化界面语言
 	private void initizalize(){
 		Language.init();
-		if(wayValue==0)
-			label_wayValue.setText(Language.NewLineWindow_label_wayValue_train());
-		else
-			label_wayValue.setText(Language.NewLineWindow_label_wayValue_plane());
 		this.setTitle(Language.NewLineWindow_title());
 		btn_ok.setText(Language.NewLineWindow_btn_ok());
 		btn_cancel.setText(Language.NewLineWindow_btn_cancel());
@@ -170,7 +194,27 @@ public class NewLineWindow extends JFrame {
 		label_startTime.setText(Language.NewLineWindow_label_startTime());
 		label_endTime.setText(Language.NewLineWindow_label_endTime());
 		label_distance.setText(Language.NewLineWindow_label_distance());
-		label_costTime.setText(Language.NewLineWindow_label_costTime());
-		label_price.setText(Language.NewLineWindow_label_way());
+		label_price.setText(Language.NewLineWindow_label_price());
+		
+		
+		if(wayValue==0){
+			label_wayValue.setText(Language.NewLineWindow_label_wayValue_train());
+		}
+		else{
+			label_wayValue.setText(Language.NewLineWindow_label_wayValue_plane());
+		}
+		DBHelper dbHelper = new DBHelper();
+		CityList list = null;
+		list = dbHelper.getAllCitys();
+		dbHelper.close();
+		cityArray = new City[list.getSize()];
+		Iterator<City> iterator = list.getList().iterator();
+		for(int i = 0 ; iterator.hasNext() ; i++){
+			cityArray[i] = (City)iterator.next();
+			comboBox_from.addItem(Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN);
+			comboBox_to.addItem(Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN);
+		}
+		
+
 	}
 }

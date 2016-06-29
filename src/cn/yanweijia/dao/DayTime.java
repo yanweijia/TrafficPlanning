@@ -49,6 +49,20 @@ public class DayTime {
 		DayTime dayTime = new DayTime(_day,_hours,_minutes);
 		return dayTime;
 	}
+	//时间减法
+	public DayTime sub(DayTime another){
+		int _minutes = this.getMinutes() - another.getMinutes();
+		int _hours = this.getHours() - another.getMinutes();
+		if(_minutes < 0){
+			_hours--;
+			_minutes = (_minutes + 60) % 60;
+		}
+		if(_hours < 0){
+			_hours = (_hours + 24) % 24;
+		}
+		DayTime dayTime = new DayTime(_hours,_minutes);
+		return dayTime;
+	}
 	public String toString(){
 		String sHours = (hours >= 10) ? String.valueOf(hours) : "0"+String.valueOf(hours);
 		String sMinutes = (minutes >= 10) ? String.valueOf(minutes) : "0"+String.valueOf(minutes);
