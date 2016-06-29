@@ -3,7 +3,9 @@ package cn.yanweijia.Appearance;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import cn.yanweijia.dao.Language;
+
+import cn.yanweijia.Tools.Language;
+
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -20,8 +22,9 @@ public class NewLineWindow extends JFrame {
 	private JButton btn_ok,btn_cancel;	//按钮: 确认,取消
 	//标签: 线路类型,起始站点,出发时间,终点站,到站时间,距离,时长,价格
 	private JLabel label_way,label_from,label_to,label_startTime,label_endTime,label_distance,label_costTime,label_price;
-	private JLabel label_wayValue;	//线路类型的值
+	private JLabel label_wayValue,label_id;	//线路类型的值 , 线路编号
 	private int wayValue;	//为0:火车,为1:飞机
+	private JTextField textField_id;
 	
 	public NewLineWindow(int wayValue) {
 		this.wayValue=wayValue;
@@ -35,11 +38,11 @@ public class NewLineWindow extends JFrame {
 		setContentPane(contentPane);
 		
 		label_way = new JLabel("Way:");
-		label_way.setBounds(38, 35, 119, 14);
+		label_way.setBounds(38, 11, 119, 14);
 		contentPane.add(label_way);
 		
 		label_wayValue = new JLabel("Train");
-		label_wayValue.setBounds(167, 35, 119, 14);
+		label_wayValue.setBounds(167, 11, 119, 14);
 		contentPane.add(label_wayValue);
 		
 		label_from = new JLabel("From:");
@@ -78,6 +81,8 @@ public class NewLineWindow extends JFrame {
 		btn_ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO:判断是否已有线路,若没有,添加新线路,若有(意思是距离,价格,发车时间等全部一样),提示用户已有该条线路
+				String lineID,line_from,line_to,startTime,endTime,distance,costTime,price;
+				
 			}
 		});
 		btn_ok.setBounds(38, 380, 119, 36);
@@ -135,6 +140,16 @@ public class NewLineWindow extends JFrame {
 		textField_costTime.setColumns(10);
 		textField_costTime.setBounds(167, 295, 119, 20);
 		contentPane.add(textField_costTime);
+		
+		label_id = new JLabel("no:");
+		label_id.setBounds(38, 42, 119, 14);
+		contentPane.add(label_id);
+		
+		textField_id = new JTextField();
+		textField_id.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_id.setColumns(10);
+		textField_id.setBounds(167, 39, 119, 20);
+		contentPane.add(textField_id);
 		initizalize();
 	}
 	
@@ -148,6 +163,7 @@ public class NewLineWindow extends JFrame {
 		this.setTitle(Language.NewLineWindow_title());
 		btn_ok.setText(Language.NewLineWindow_btn_ok());
 		btn_cancel.setText(Language.NewLineWindow_btn_cancel());
+		label_id.setText(Language.NewLineWindow_label_id());
 		label_way.setText(Language.NewLineWindow_label_way());
 		label_from.setText(Language.NewLineWindow_label_from());
 		label_to.setText(Language.NewLineWindow_label_to());

@@ -1,4 +1,4 @@
-package cn.yanweijia.dao;
+package cn.yanweijia.Tools;
 
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -185,12 +185,50 @@ public class Language {
 	public static String NewCity_btn_cancel(){
 		return pro.getProperty("NewCity_btn_cancel","取消");
 	}
-	
-	
-	
-	
-	
-	
-	
+	public static String MainWindow_Table_cityID(){
+		return pro.getProperty("MainWindow_table_cityId","城市编号");
+	}
+	public static String MainWindow_Table_cityNameCN(){
+		return pro.getProperty("MainWindow_table_cityNameCN","中文名称");
+	}
+	public static String MainWindow_Table_cityNameEN(){
+		return pro.getProperty("MainWindow_table_cityNameEN","英文名称");
+	}
+	public static String MainWindow_Table_cityLongitude(){
+		return pro.getProperty("MainWindow_table_cityLongitude","经度");
+	}
+	public static String MainWindow_Table_cityLatitude(){
+		return pro.getProperty("MainWindow_table_cityLatitude","纬度");
+	}
+	public static String LineWindow_table_LineID_train(){
+		return pro.getProperty("LineWindow_table_LineID_train","列车编号");
+	}
+	public static String LineWindow_table_LineID_plane(){
+		return pro.getProperty("LineWindow_table_LineID_plane","航班编号");
+	}
+	public static String LineWindow_table_LineFrom(){
+		return pro.getProperty("LineWindow_table_LineFrom","出发站点");
+	}
+	public static String LineWindow_table_LineTo(){
+		return pro.getProperty("LineWindow_table_LineTo","到达站点");
+	}
+	public static String LineWindow_table_startTime(){
+		return pro.getProperty("LineWindow_table_startTime","出发时间");
+	}
+	public static String LineWindow_table_endTime(){
+		return pro.getProperty("LineWindow_table_endTime","到站时间");
+	}
+	public static String LineWindow_table_distance(){
+		return pro.getProperty("LineWindow_table_distance","两站距离");
+	}
+	public static String LineWindow_table_costTime(){
+		return pro.getProperty("LineWindow_table_costTime","花费时间");
+	}
+	public static String LineWindow_table_price(){
+		return pro.getProperty("LineWindow_table_price","价格");
+	}
+	public static String NewLineWindow_label_id(){
+		return pro.getProperty("NewLineWindow_label_id","线路编号:");
+	}
 	
 }

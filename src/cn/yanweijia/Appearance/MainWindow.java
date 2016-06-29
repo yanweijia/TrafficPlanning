@@ -11,9 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-import cn.yanweijia.dao.Config;
-import cn.yanweijia.dao.Debug;
-import cn.yanweijia.dao.Language;
+
+import cn.yanweijia.Tools.Config;
+import cn.yanweijia.Tools.Debug;
+import cn.yanweijia.Tools.Language;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
@@ -26,7 +28,7 @@ import java.awt.Color;
 public class MainWindow {
 	private JPanel contentPane,panel;	//默认面板,查询面板
 	private JFrame frame;
-	private JButton btn_city,btn_line,btn_history,btn_language;//顶部四个按钮
+	private JButton btn_city,btn_line,btn_language;//顶部四个按钮
 	private JButton btn_query,btn_clear;	//按钮:查询,清空查询结果
 	private TitledBorder titledBorder;	//"查询"面板的边框
 	private JLabel label_way,label_rules,label_from,label_to;	//四个标签:交通方式,决策原则,起始站点,到达站点.
@@ -80,17 +82,8 @@ public class MainWindow {
 				new LineWindow();
 			}
 		});
-		btn_line.setBounds(164, 11, 120, 40);
+		btn_line.setBounds(234, 11, 120, 40);
 		contentPane.add(btn_line);
-		
-		btn_history = new JButton("History");
-		btn_history.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new HistoryWindow();
-			}
-		});
-		btn_history.setBounds(316, 11, 120, 40);
-		contentPane.add(btn_history);
 		
 		btn_language = new JButton("Language");
 		btn_language.addActionListener(new ActionListener() {
@@ -250,7 +243,6 @@ public class MainWindow {
 		frame.setTitle(Language.MainWindow_title());
 		btn_city.setText(Language.MainWindow_btn_city());
 		btn_line.setText(Language.MainWindow_btn_line());
-		btn_history.setText(Language.MainWindow_btn_history());
 		btn_language.setText(Language.MainWindow_btn_language());
 		titledBorder.setTitle(Language.MainWindow_titledBorder());
 		label_way.setText(Language.MainWindow_label_way());

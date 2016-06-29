@@ -5,12 +5,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import cn.yanweijia.dao.Language;
+import cn.yanweijia.Tools.Language;
+import cn.yanweijia.dao.DBHelper;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class NewCity extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -35,10 +39,37 @@ public class NewCity extends JFrame {
 		contentPane.setLayout(null);
 		
 		btn_ok = new JButton("OK");
+		btn_ok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String cityID,nameCN,nameEN,longitude,latitude;
+				cityID = textField_cityID.getText();
+				nameCN = textField_nameCN.getText();
+				nameEN = textField_nameEN.getText();
+				longitude = textField_longitude.getText();
+				latitude = textField_latitude.getText();
+				if(cityID.equals("") || nameCN.equals("") || nameEN.equals("") || longitude.equals("") || latitude.equals(""))
+					JOptionPane.showMessageDialog(NewCity.this, "请输入完整(Please complete your datas)!");
+				if(Integer.parseInt(cityID)<=0)
+					JOptionPane.showMessageDialog(NewCity.this, "城市编号输入错误!(Fail)");
+				DBHelper dbHelper = new DBHelper();
+				boolean flag = dbHelper.addCity(Integer.parseInt(cityID), nameCN, nameEN, Double.parseDouble(longitude), Double.parseDouble(latitude));
+				if(flag){
+					JOptionPane.showMessageDialog(NewCity.this, "添加新城市成功");
+					dispose();	//关闭当前窗口
+				}
+				else
+					JOptionPane.showMessageDialog(NewCity.this, "添加新城市失败,请查看城市Id是否已经存在,或者数据输入是否正确");
+			}
+		});
 		btn_ok.setBounds(45, 305, 125, 50);
 		contentPane.add(btn_ok);
 		
 		btn_cancel = new JButton("CANCEL");
+		btn_cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				NewCity.this.dispose();	//关闭当前窗口
+			}
+		});
 		btn_cancel.setBounds(180, 305, 125, 50);
 		contentPane.add(btn_cancel);
 		
