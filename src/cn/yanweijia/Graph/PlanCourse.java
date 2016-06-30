@@ -12,7 +12,7 @@ public class PlanCourse {
 		
 		Node originNode = null;
 		for(Node node:nodeList){
-			if(node.ID == originID){
+			if(node.ID.equals(originID)){
 				originNode = node;
 			}else{
 				PassedPath pPath = new PassedPath(node.ID);
@@ -37,7 +37,7 @@ public class PlanCourse {
 		}
 	}
 	public PassedPath getPassedPath(String nodeID){
-		return (PassedPath) this.htPassedPath.get(nodeID);
+		return this.htPassedPath.get(nodeID);
 	}
 	
 }
