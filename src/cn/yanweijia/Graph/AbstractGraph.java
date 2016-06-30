@@ -1,5 +1,4 @@
-package cn.yanweijia.tu;
-
+package cn.yanweijia.Graph;
 public class AbstractGraph<T>
 {
 	public static final int MAX_WEIGHT=0x0000ffff;
@@ -18,7 +17,7 @@ public class AbstractGraph<T>
 	}
 	public String toString()
 	{
-		return "���㼯�ϣ�   "+this.vertexlist.toString()+"\n";
+		return "顶点集合：   "+this.vertexlist.toString()+"\n";
 	}
     public T getVertex(int i)
     {

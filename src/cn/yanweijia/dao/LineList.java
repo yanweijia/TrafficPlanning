@@ -28,6 +28,17 @@ public class LineList {
 		}
 		return null;
 	}
+	public Line getLine(int line_from,int line_to){
+		Line[] lineArray = getLineWithStartCity(line_from);
+		//寻找相同的
+		for(int i = 0 ; i < lineArray.length ; i++){
+			if(lineArray[i].lineTo==line_to){
+				return lineArray[i];
+			}
+		}
+		return null;
+		
+	}
 	public Line[] getLineWithStartCity(int cityID){
 		Line[] lineArray ,lineArray_new;
 		int lineCount = 0;

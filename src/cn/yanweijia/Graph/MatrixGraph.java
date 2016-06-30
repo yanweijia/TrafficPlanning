@@ -1,4 +1,4 @@
-package cn.yanweijia.tu;
+package cn.yanweijia.Graph;
 
 public class MatrixGraph<T> extends AbstractGraph<T>
 {
@@ -241,10 +241,9 @@ public class MatrixGraph<T> extends AbstractGraph<T>
 	}
 		//判断该点是否在顶点集合里
 	    public int contain(T[] vertices,String s1){
-	    	int i=0;
 	    	for(int k=0;k<vertices.length;k++)
 	    		if(s1==vertices[k].toString())
-	    			return i=0;
+	    			return 0;
 	    	return -1;
 	    }
 }

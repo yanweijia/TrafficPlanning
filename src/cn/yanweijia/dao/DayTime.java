@@ -69,7 +69,10 @@ public class DayTime {
 		return sHours + ":" + sMinutes;
 	}
 	public String toStringWithDay(){
-		return String.valueOf(day) + ":" + toString();
+		return String.valueOf(day) + "d " + toString();
+	}
+	public int toInt(){
+		return this.day*24*60 + this.hours*60 + this.minutes;
 	}
 
 	public int getDay() {

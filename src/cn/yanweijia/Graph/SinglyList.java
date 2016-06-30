@@ -1,4 +1,4 @@
-package cn.yanweijia.tu;
+package cn.yanweijia.Graph;
 
 public class SinglyList<T> extends Object{
 	public Node<T>head;

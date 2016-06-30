@@ -42,7 +42,7 @@ public class DBHelper {
 	//关闭数据连接,使用完成及时释放连接资源
 	public void close(){
 		try {
-			result.close();
+			//result.close();
 			pst.close();
 			con.close();
 		} catch (SQLException e) {
@@ -108,9 +108,12 @@ public class DBHelper {
 				String ID = result.getString("line_id");
 				int lineFrom = result.getInt("line_from");
 				int lineTo = result.getInt("line_to");
-				DayTime startTime = new DayTime(result.getString("startTime"));
-				DayTime endTime = new DayTime(result.getString("endTime"));
-				DayTime costTime = new DayTime(result.getString("costTime"));
+				String strStartTime = result.getString("startTime");
+				DayTime startTime = new DayTime(strStartTime.substring(0, strStartTime.lastIndexOf(':')));
+				String strEndTime = result.getString("endTime");
+				DayTime endTime = new DayTime(strEndTime.substring(0, strEndTime.lastIndexOf(':')));
+				String strCostTime = result.getString("costTime");
+				DayTime costTime = new DayTime(strCostTime.substring(0, strCostTime.lastIndexOf(':')));
 				double distance = result.getDouble("distance");
 				double price = result.getDouble("price");
 				Line line = new Line(ID,lineFrom,lineTo,startTime,endTime,costTime,distance,price);

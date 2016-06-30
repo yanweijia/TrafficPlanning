@@ -1,4 +1,4 @@
-package cn.yanweijia.tu;
+package cn.yanweijia.Graph;
 
 public final class LinkedQueue<T>{
 	private Node<T> front,rear;

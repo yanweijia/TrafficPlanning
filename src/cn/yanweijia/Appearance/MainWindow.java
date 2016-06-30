@@ -11,13 +11,21 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import cn.yanweijia.Graph.Graph;
 import cn.yanweijia.Tools.Config;
 import cn.yanweijia.Tools.Debug;
 import cn.yanweijia.Tools.Language;
 import cn.yanweijia.dao.City;
 import cn.yanweijia.dao.CityList;
 import cn.yanweijia.dao.DBHelper;
+import cn.yanweijia.dao.DayTime;
+import cn.yanweijia.dao.Line;
+import cn.yanweijia.dao.LineList;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
@@ -37,8 +45,11 @@ public class MainWindow {
 	private JLabel label_sumTime,label_sumMoney,label_sumTransfer;	//三个标签:总用时,总金额,换乘次数
 	private JLabel label_sumTimeValue,label_sumMoneyValue,label_sumTransferValue;	//显示 总用时,总金额,换乘次数 的标签.
 	private JComboBox<String> comboBox_way,comboBox_rules,comboBox_from,comboBox_to;	//组合框:交通方式,决策原则,起始站点,到达站点
-	private JTable table;
 	private City[] cityArray;	//城市列表,窗口焦点获取则更新
+	private JPanel panel_table;
+	private JTable table;	//显示线路数据
+	private JLabel label_distance;
+	private JLabel label_distanceValue;
 	/*
 	 * 主过程
 	 */
@@ -68,6 +79,7 @@ public class MainWindow {
 		contentPane = (JPanel)frame.getContentPane();
 		contentPane.setLayout(null);
 		
+		table = new JTable();
 		
 		btn_city = new JButton("City");
 		btn_city.setBounds(10, 11, 120, 40);
@@ -147,7 +159,7 @@ public class MainWindow {
 		comboBox_rules.removeAllItems();
 		comboBox_rules.addItem("TimeFirst");
 		comboBox_rules.addItem("MoneyFirst");
-		comboBox_rules.addItem("transferFirst");
+		comboBox_rules.addItem("DistanceFirst");
 		panel.add(comboBox_rules);
 		
 		comboBox_from = new JComboBox<String>();
@@ -176,7 +188,7 @@ public class MainWindow {
 					return;
 				}
 				//把CityID找出来
-				int id_from,id_to;
+				int id_from = 1,id_to = 3;
 				for(int i = 0 ; i < cityArray.length ; i++){
 					if((Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN).equals(from))
 						id_from = cityArray[i].id;
@@ -185,45 +197,106 @@ public class MainWindow {
 					if((Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN).equals(to))
 						id_to = cityArray[i].id;
 				}
-				//TODO:这里调用核心代码来计算数据
 				
+				DBHelper dbHelper = new DBHelper();
+				CityList cityList = dbHelper.getAllCitys();
+				LineList lineList;
+				if(comboBox_way.getSelectedIndex()==0)
+					lineList = dbHelper.getAllLineList_Train();
+				else
+					lineList = dbHelper.getAllLineList_Plane();
+				dbHelper.close();
+				//这里调用核心代码来计算数据
+				LineList lineListResult = Graph.getLineList(cityList, lineList, id_from,id_to,(comboBox_rules.getSelectedIndex()==0)?Graph.PRINCPLE_DISTANCE:Graph.PRINCPLE_PRICE);
+				
+				DefaultTableModel tableModel = getNewTableModel();
+				Iterator<Line> iterator = lineListResult.getList().iterator();
+				double price = 0.0d;
+				double distance = 0.0d;
+				DayTime sumTime = new DayTime("00:00");
+				while(iterator.hasNext()){
+					Line line = iterator.next();
+					if(line==null)
+						continue;
+					Object value[] = new Object[8];
+					value[0] = line.ID;
+					value[1] = Config.getLanguage()==Config.LANGUAGE_CN?cityList.getCity(line.lineFrom).nameCN:cityList.getCity(line.lineFrom).nameEN;
+					value[2] = Config.getLanguage()==Config.LANGUAGE_CN?cityList.getCity(line.lineTo).nameCN:cityList.getCity(line.lineTo).nameEN;
+					value[3] = line.startTime.toString();
+					value[4] = line.endTime.toString();
+					value[5] = line.distance;
+					value[6] = line.costTime.toString();
+					value[7] = line.price;
+					tableModel.addRow(value);
+					
+					price += line.price;
+					distance += line.distance;
+					sumTime = sumTime.add(line.endTime.sub(line.startTime).add(line.costTime));
+				}
+				table.setModel(tableModel);
+				label_distanceValue.setText("" + distance);
+				label_sumMoneyValue.setText("" + price);
+				label_sumTimeValue.setText(sumTime.toStringWithDay());
+				label_sumTransferValue.setText("" + tableModel.getRowCount());
+				
+				Debug.log("查询成功!");
 			}
 		});
 		btn_query.setBounds(377, 111, 120, 28);
 		panel.add(btn_query);
 		
 		btn_clear = new JButton("ClearResult");
+		btn_clear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DefaultTableModel tableModel = getNewTableModel();
+				table.setModel(tableModel);
+				label_distanceValue.setText("");
+				label_sumMoneyValue.setText("");
+				label_sumTimeValue.setText("");
+				label_sumTransferValue.setText("");
+			}
+		});
 		btn_clear.setBounds(36, 111, 120, 28);
 		panel.add(btn_clear);
 		
-		table = new JTable();
-		table.setBorder(new LineBorder(new Color(0, 0, 0)));	//布局边界_分界线
-		table.setBounds(10, 150, 556, 282);
-		panel.add(table);
-		
 		label_sumTime = new JLabel("SumTime:");
-		label_sumTime.setBounds(10, 454, 70, 20);
+		label_sumTime.setBounds(10, 454, 50, 20);
 		panel.add(label_sumTime);
 		
 		label_sumMoney = new JLabel("SumMoney:");
-		label_sumMoney.setBounds(176, 454, 70, 20);
+		label_sumMoney.setBounds(146, 454, 55, 20);
 		panel.add(label_sumMoney);
 		
 		label_sumTransfer = new JLabel("TransferNum:");
-		label_sumTransfer.setBounds(377, 454, 95, 20);
+		label_sumTransfer.setBounds(416, 454, 70, 20);
 		panel.add(label_sumTransfer);
 		
 		label_sumTimeValue = new JLabel("time");
-		label_sumTimeValue.setBounds(86, 454, 70, 20);
+		label_sumTimeValue.setBounds(70, 454, 70, 20);
 		panel.add(label_sumTimeValue);
 		
 		label_sumMoneyValue = new JLabel("money");
-		label_sumMoneyValue.setBounds(256, 454, 70, 20);
+		label_sumMoneyValue.setBounds(211, 454, 70, 20);
 		panel.add(label_sumMoneyValue);
 		
 		label_sumTransferValue = new JLabel("transfer");
-		label_sumTransferValue.setBounds(482, 454, 70, 20);
+		label_sumTransferValue.setBounds(496, 454, 70, 20);
 		panel.add(label_sumTransferValue);
+		
+		panel_table = new JPanel();
+		panel_table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_table.setBounds(10, 150, 556, 296);
+		panel.add(panel_table);
+		
+		panel_table.add(new JScrollPane(table));
+		
+		label_distance = new JLabel("diatance");
+		label_distance.setBounds(271, 454, 61, 20);
+		panel.add(label_distance);
+		
+		label_distanceValue = new JLabel("diatance");
+		label_distanceValue.setBounds(342, 454, 50, 20);
+		panel.add(label_distanceValue);
 		
 		
 		frame.addWindowListener(new WindowAdapter() {
@@ -274,12 +347,17 @@ public class MainWindow {
 		comboBox_way.addItem(Language.MainWindow_comboBox_way_train());
 		comboBox_way.addItem(Language.MainWindow_comboBox_way_plane());
 		comboBox_rules.removeAllItems();
-		comboBox_rules.addItem(Language.MainWindow_comboBox_rules_timeFirst());
+		comboBox_rules.addItem(Language.MainWindow_comboBox_rules_distanceFirst());
 		comboBox_rules.addItem(Language.MainWindow_comboBox_rules_moneyFirst());
-		comboBox_rules.addItem(Language.MainWindow_comboBox_rules_transferFirst());
+		comboBox_rules.addItem(Language.MainWindow_comboBox_rules_timeFirst());
 		label_sumTime.setText(Language.MainWindow_label_sumTime());
 		label_sumMoney.setText(Language.MainWindow_label_sumMoney());
 		label_sumTransfer.setText(Language.MainWindow_label_sumTransfer());
+		label_distance.setText(Language.MainWindow_label_distance());
+		label_distanceValue.setText("");
+		label_sumMoneyValue.setText("");
+		label_sumTimeValue.setText("");
+		label_sumTransferValue.setText("");
 	}
 	//重新加载城市列表
 	private void reloadCityList(){
@@ -289,10 +367,27 @@ public class MainWindow {
 		dbHelper.close();
 		cityArray = new City[list.getSize()];
 		Iterator<City> iterator = list.getList().iterator();
+		comboBox_from.removeAllItems();
+		comboBox_to.removeAllItems();
 		for(int i = 0 ; iterator.hasNext() ; i++){
 			cityArray[i] = (City)iterator.next();
 			comboBox_from.addItem(Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN);
 			comboBox_to.addItem(Config.getLanguage()==Config.LANGUAGE_CN?cityArray[i].nameCN:cityArray[i].nameEN);
 		}
+	}
+	private DefaultTableModel getNewTableModel(){
+		String line_id,line_from,line_to,startTime,endTime,distance,costTime,price;
+		line_id = (comboBox_way.getSelectedIndex()==0)?Language.LineWindow_table_LineID_train():Language.LineWindow_table_LineID_plane();
+		line_from = Language.LineWindow_table_LineFrom();
+		line_to = Language.LineWindow_table_LineTo();
+		startTime = Language.LineWindow_table_startTime();
+		endTime = Language.LineWindow_table_endTime();
+		distance = Language.LineWindow_table_distance();
+		costTime = Language.LineWindow_table_costTime();
+		price = Language.LineWindow_table_price();
+		
+		Object name[] = {line_id,line_from,line_to,startTime,endTime,distance,costTime,price};
+		DefaultTableModel tableModel = new DefaultTableModel(name, 0);
+		return tableModel;
 	}
 }

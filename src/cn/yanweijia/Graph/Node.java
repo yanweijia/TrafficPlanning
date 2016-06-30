@@ -1,24 +1,22 @@
 package cn.yanweijia.Graph;
 
-import java.util.HashMap;
-import java.util.Map;
+public class Node<T> 
+{
+	public T data;
+	public Node<T>next;
+	public Node(T data,Node<T>next)
+	{
+		this.data=data;
+		this.next=next;
+	}
+	public Node()
+	{
+		this(null,null);
+	}
+	public String toString()
+	{
+		return this.data.toString();
+	}
 
-public class Node {
-	private String name;
-	private Map<Node,Double> child=new HashMap<Node,Double>();
-	public Node(String name){
-		this.name=name;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Map<Node, Double> getChild() {
-		return child;
-	}
-	public void setChild(Map<Node, Double> child) {
-		this.child = child;
-	}
 }
+

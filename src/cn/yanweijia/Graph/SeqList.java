@@ -1,4 +1,4 @@
-package cn.yanweijia.tu;
+package cn.yanweijia.Graph;
 
 public class SeqList<T> {
 	protected Object table[];
@@ -6,6 +6,7 @@ public class SeqList<T> {
 	public int length(){
 		return n;
 	}
+	@SuppressWarnings("unchecked")
 	public T get(int i){
 		if(i>=0&&i<n){
 			return (T) table[i]; 
@@ -70,6 +71,7 @@ public class SeqList<T> {
 	{
 		if(this.n>0&&i>=0&&i<this.n)
 		{
+			@SuppressWarnings("unchecked")
 			T old=(T)this.table[i];
 			for(int j=i;j<this.n-1;j++)
 				this.table[j]=this.table[j+1];

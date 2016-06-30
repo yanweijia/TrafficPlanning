@@ -59,6 +59,9 @@ public class Language {
 	public static String MainWindow_label_to(){
 		return pro.getProperty("MainWindow_label_to","到达站点:");
 	}
+	public static String MainWindow_label_distance(){
+		return pro.getProperty("MainWindow_label_distance","总距离");
+	}
 	public static String MainWindow_btn_query(){
 		return pro.getProperty("MainWindow_btn_query","查询");
 	}
@@ -77,8 +80,8 @@ public class Language {
 	public static String MainWindow_comboBox_rules_moneyFirst(){
 		return pro.getProperty("MainWindow_comboBox_rules_moneyFirst","价格最少");
 	}
-	public static String MainWindow_comboBox_rules_transferFirst(){
-		return pro.getProperty("MainWindow_comboBox_rules_transferFirst","最少换乘");
+	public static String MainWindow_comboBox_rules_distanceFirst(){
+		return pro.getProperty("MainWindow_comboBox_rules_distanceFirst","距离最短");
 	}
 	public static String MainWindow_label_sumTime(){
 		return pro.getProperty("MainWindow_label_sumTime","总时间:");
