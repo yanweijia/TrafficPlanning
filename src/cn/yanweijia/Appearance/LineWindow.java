@@ -3,8 +3,11 @@ package cn.yanweijia.Appearance;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import cn.yanweijia.Tools.Config;
 import cn.yanweijia.Tools.Debug;
 import cn.yanweijia.Tools.Language;
+import cn.yanweijia.dao.CityList;
 import cn.yanweijia.dao.DBHelper;
 import cn.yanweijia.dao.Line;
 import cn.yanweijia.dao.LineList;
@@ -148,6 +151,7 @@ public class LineWindow extends JFrame {
 		DefaultTableModel tableModel = new DefaultTableModel(name, 0);
 		//Object value[][];	//表格元素
 		DBHelper dbHelper = new DBHelper();
+		CityList cityList = dbHelper.getAllCitys();
 		LineList list = (lineType==0)?dbHelper.getAllLineList_Train():dbHelper.getAllLineList_Plane();
 		dbHelper.close();
 		//int initRows = list.getSize();
@@ -157,8 +161,8 @@ public class LineWindow extends JFrame {
 			Line line = iterator.next();
 			Object value[] = new Object[8];
 			value[0] = line.ID;
-			value[1] = line.lineFrom;
-			value[2] = line.lineTo;
+			value[1] = Config.getLanguage()==Config.LANGUAGE_CN?cityList.getCity(line.lineFrom).nameCN:cityList.getCity(line.lineFrom).nameEN;
+			value[2] = Config.getLanguage()==Config.LANGUAGE_CN?cityList.getCity(line.lineTo).nameCN:cityList.getCity(line.lineTo).nameEN;
 			value[3] = line.startTime.toString();
 			value[4] = line.endTime.toString();
 			value[5] = line.distance;

@@ -1,23 +1,23 @@
 package cn.yanweijia.Graph;
 
 
-import cn.yanweijia.Tools.Config;
+//import cn.yanweijia.Tools.Config;
 import cn.yanweijia.dao.City;
 import cn.yanweijia.dao.CityList;
-import cn.yanweijia.dao.DBHelper;
+//import cn.yanweijia.dao.DBHelper;
 import cn.yanweijia.dao.Line;
 import cn.yanweijia.dao.LineList;
 
 public class Graph {
 	public static final int PRINCPLE_DISTANCE = 1;
 	public static final int PRINCPLE_PRICE = 2;
-	public static void main(String[] args){
-		Config.init();
-		DBHelper dbHelper = new DBHelper();
-		CityList cityList = dbHelper.getAllCitys();
-		LineList lineList = dbHelper.getAllLineList_Train();
-		getLineList(cityList,lineList,1,3,PRINCPLE_DISTANCE);
-	}
+//	public static void main(String[] args){
+//		Config.init();
+//		DBHelper dbHelper = new DBHelper();
+//		CityList cityList = dbHelper.getAllCitys();
+//		LineList lineList = dbHelper.getAllLineList_Train();
+//		getLineList(cityList,lineList,1,3,PRINCPLE_DISTANCE);
+//	}
 	
 	
 	public static LineList getLineList(CityList cityList,LineList lineList,int startID,int endID,int princple){
