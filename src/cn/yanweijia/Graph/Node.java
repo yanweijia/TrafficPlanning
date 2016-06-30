@@ -1,13 +1,24 @@
 package cn.yanweijia.Graph;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-//节点定义
 public class Node {
-	public String ID;
-	public ArrayList<Edge> edgeList;	//Edge集合,出边表
-	public Node(String _id){
-		this.ID = _id;
-		this.edgeList = new ArrayList<Edge>();
+	private String name;
+	private Map<Node,Double> child=new HashMap<Node,Double>();
+	public Node(String name){
+		this.name=name;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Map<Node, Double> getChild() {
+		return child;
+	}
+	public void setChild(Map<Node, Double> child) {
+		this.child = child;
 	}
 }

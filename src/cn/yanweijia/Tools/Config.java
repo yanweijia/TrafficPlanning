@@ -8,8 +8,8 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class Config {
-	public static final int LANGUAGE_CN = 1;
-	public static final int LANGUAGE_EN = 2;
+	public static final int LANGUAGE_CN = 0;
+	public static final int LANGUAGE_EN = 1;
 	private static Properties pro = null;	//存放配置信息(String类型的键值对)
 	private static final String FILE_DIR = "Config.ini";
 	

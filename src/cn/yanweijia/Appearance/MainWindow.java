@@ -6,22 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Iterator;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-
 import cn.yanweijia.Tools.Config;
 import cn.yanweijia.Tools.Debug;
 import cn.yanweijia.Tools.Language;
 import cn.yanweijia.dao.City;
 import cn.yanweijia.dao.CityList;
 import cn.yanweijia.dao.DBHelper;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
