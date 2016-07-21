@@ -37,7 +37,6 @@ public class LineList {
 			}
 		}
 		return null;
-		
 	}
 	public Line[] getLineWithStartCity(int cityID){
 		Line[] lineArray ,lineArray_new;
